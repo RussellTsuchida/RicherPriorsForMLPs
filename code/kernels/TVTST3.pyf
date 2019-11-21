@@ -1,0 +1,17 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module TVTST3 ! in 
+    interface  ! in :TVTST3
+        subroutine vec_bvnd(dh,dk,r,output,n) ! in :TVTST3:TVTST.f
+            double precision dimension(n) :: dh
+            double precision dimension(n),depend(n) :: dk
+            double precision dimension(n),depend(n) :: r
+            double precision dimension(n),depend(n) :: output
+            integer, optional,check(len(dh)>=n),depend(dh) :: n=len(dh)
+        end subroutine vec_bvnd
+    end interface 
+end python module TVTST3
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/
