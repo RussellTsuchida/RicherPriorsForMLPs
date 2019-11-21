@@ -24,7 +24,7 @@ import scipy.spatial as sp
 from scipy import special
 from scipy.stats.mstats import mquantiles
 import numpy as np
-
+from ..mvn_mixture.diag_mvn_mixture import DiagMVNMixture
 
 
 
