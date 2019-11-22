@@ -80,9 +80,6 @@ prior_w_var_scale_0 = 6
 # Variance for proposal
 prop_var_0 = [2.38, 2.38*2]
 
-sigma_left      = 1.
-mu_bot_0        = -4
-mu_top          = 0.1
 # Starting grid points are different for different datasets
 if (DATASET == 'yacht') or (DATASET == 'mauna'):
     dynamic_grid = DynamicGrid([1., 1.], [3.5, -0.5])
@@ -148,7 +145,7 @@ max_like_c0 = -np.inf
 for coarse_fine in range(2):
     # Update the coarse grid 
     if coarse_fine == 1:
-        dynamic_grid.update_corners(likelihood, USE_LOG, GRID_SIZE)
+        dynamic_grid.update_corners(likelihood, USE_LOG, MLE_c0, GRID_SIZE)
     sigma2_list, mu_list = dynamic_grid.one_dimensional_grids()
     SIGMA2, MU = dynamic_grid.two_dimensional_grid()
 
@@ -162,12 +159,11 @@ for coarse_fine in range(2):
                 if value > max_like:
                     max_like = value
                     MLE = np.asarray([mu, sigma2])
-                if (mu == 0) and (value > max_like_c0) :
+                if (mu == 0) and (value > max_like_c0):
                     max_like_c0 = value
                     MLE_c0 = np.asarray([mu, sigma2])
             except:
                 print("Bad hyperparameters " + str(mu) + '_' + str(sigma2))
-
 
 # Plot the likelihood
 plot_likelihood(likelihood, sigma=SIGMA2, mu=MU,

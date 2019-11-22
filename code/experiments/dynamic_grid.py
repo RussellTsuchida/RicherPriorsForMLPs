@@ -1,4 +1,5 @@
 import numpy as np
+import os
 
 class DynamicGrid(object):
     """
@@ -10,7 +11,7 @@ class DynamicGrid(object):
 
     Follow the convention of [x, y], i.e. [horizontal, vertical].
     """
-    def __init__(self, top_left, bottom_right, grid_size = 20, 
+    def __init__(self, top_left, bottom_right, grid_size = 100, 
             p = 0.2):
         """
         Args:
@@ -55,7 +56,7 @@ class DynamicGrid(object):
 
         return [mesh_horz, mesh_vert]
 
-    def update_corners(self, likelihood, log, grid_size = 100):
+    def update_corners(self, likelihood, log, MLE_c0, grid_size = 100):
         """
         Find the grid points where the likelihood is equal to self.p and set
         these points to be the new corners.
@@ -64,6 +65,8 @@ class DynamicGrid(object):
             likelihood (nparray): of size (self.grid_size, self.grid_size)
             log (bool): True for log likelihood, False for likelihood.
             grid_size (int): number of discrete points in each direction.
+            MLE_c0 (nparray): the MLE constrained to have mean zero. Always
+                include this point in the region defined by the boundary.
         """
         if log:
             likelihood = np.exp(likelihood)
@@ -73,15 +76,18 @@ class DynamicGrid(object):
 
         top     = np.amax(interesting_points[0])
         bot     = np.amin(interesting_points[0])
-        left    = np.amax(interesting_points[1])
-        right   = np.amin(interesting_points[1])
+        left    = np.amin(interesting_points[1])
+        right   = np.amax(interesting_points[1])
 
         grid_horz, grid_vert = self.one_dimensional_grids()
 
         # Max and Min to ensure we always include mu = 0 visualisation
-        self.top_left = [grid_horz[left], max(grid_vert[top], 0.1)]
-        self.bottom_right = [grid_horz[right], min(grid_vert[bot], -0.1)]
-        
+        # and we always include MLE of model with zero mea
+        self.top_left = [min(grid_horz[left], MLE_c0[1]), 
+                max(grid_vert[top], 0.1, MLE_c0[0])]
+        self.bottom_right = [max(grid_horz[right], MLE_c0[1]),
+                min(grid_vert[bot], -0.1, MLE_c0[0])]
+
         self.grid_size = grid_size
 
 
