@@ -31,10 +31,10 @@ class Mlp(object):
         self.layer_activations  = layer_activations
 
         if weight_init is None:
-            weight_init = create_initialiser(lambda A, B, C, D: np.sqrt(2), 
+            weight_init = create_initialiser(lambda A, B, C, D: np.sqrt(2)*D, 
                     lambda A, B, C: 0)
         if bias_init is None:
-            bias_init = create_initialiser(lambda A, B, C, D: np.sqrt(2), 
+            bias_init = create_initialiser(lambda A, B, C, D: np.sqrt(2)*D, 
                     lambda A, B, C: 0)
         self.weight_init        = weight_init
         self.bias_init          = bias_init
@@ -94,6 +94,10 @@ class Mlp(object):
             weights = self.layer_weights[l]
             biases = self.layer_biases[l]
             
+            print(weights.shape)
+            print(biases.shape)
+            print(layer_input.shape)
+
             layer_input = \
             self.layer_activations[l](np.matmul(weights, layer_input) + biases)
 
