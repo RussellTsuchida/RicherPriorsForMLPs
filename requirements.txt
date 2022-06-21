@@ -10,7 +10,7 @@ GPy==1.9.9
 kiwisolver==1.1.0
 matplotlib==3.1.1
 munch==2.5.0
-numpy==1.17.4
+numpy==1.22.0
 pandas==0.25.3
 paramz==0.9.5
 pyparsing==2.4.5
